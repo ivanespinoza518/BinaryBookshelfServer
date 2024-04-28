@@ -1,0 +1,6 @@
+@BinaryBookshelfServer_HostAddress = http://localhost:5130
+
+GET {{BinaryBookshelfServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
