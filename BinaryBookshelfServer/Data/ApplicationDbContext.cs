@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using BinaryBookshelfServer.Data.Models;
 
 namespace BinaryBookshelfServer.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<BinaryBookshelfUser>
     {
         public ApplicationDbContext() : base()
         {

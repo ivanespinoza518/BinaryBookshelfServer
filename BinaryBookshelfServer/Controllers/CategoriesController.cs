@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BinaryBookshelfServer.Data;
 using BinaryBookshelfServer.Data.Dto;
 using BinaryBookshelfServer.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BinaryBookshelfServer.Controllers
 {
@@ -57,6 +53,7 @@ namespace BinaryBookshelfServer.Controllers
 
         // GET: api/Categories/BooksOfCategory/5
         [HttpGet("BooksOfCategory/{id}")]
+        [Authorize(Roles = "RegisteredUser")]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooksOfCategory(int id)
         {
             return await context.Books.Where(b => b.CategoryId == id).ToListAsync();
@@ -65,6 +62,7 @@ namespace BinaryBookshelfServer.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "RegisteredUser")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
             if (id != category.Id)
@@ -96,6 +94,7 @@ namespace BinaryBookshelfServer.Controllers
         // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "RegisteredUser")]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
             context.Categories.Add(category);
@@ -106,6 +105,7 @@ namespace BinaryBookshelfServer.Controllers
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await context.Categories.FindAsync(id);

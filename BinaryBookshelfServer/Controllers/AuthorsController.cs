@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using BinaryBookshelfServer.Data;
 using BinaryBookshelfServer.Data.Dto;
 using BinaryBookshelfServer.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BinaryBookshelfServer.Controllers
 {
@@ -53,6 +54,7 @@ namespace BinaryBookshelfServer.Controllers
 
         // GET: api/Authors/BooksByAuthor/5
         [HttpGet("BooksByAuthor/{id}")]
+        [Authorize(Roles = "RegisteredUser")]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooksByAuthor(int id)
         {
             return await context.Books.Where(b => b.AuthorId == id).ToListAsync();
@@ -61,6 +63,7 @@ namespace BinaryBookshelfServer.Controllers
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "RegisteredUser")]
         public async Task<IActionResult> PutAuthor(int id, Author author)
         {
             if (id != author.Id)
@@ -92,6 +95,7 @@ namespace BinaryBookshelfServer.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "RegisteredUser")]
         public async Task<ActionResult<Author>> PostAuthor(Author author)
         {
             context.Authors.Add(author);
@@ -102,6 +106,7 @@ namespace BinaryBookshelfServer.Controllers
 
         // DELETE: api/Authors/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             var author = await context.Authors.FindAsync(id);
