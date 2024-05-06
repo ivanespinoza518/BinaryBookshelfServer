@@ -54,9 +54,39 @@ namespace BinaryBookshelfServer.Controllers
         // GET: api/Categories/BooksOfCategory/5
         [HttpGet("BooksOfCategory/{id}")]
         [Authorize(Roles = "RegisteredUser")]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooksOfCategory(int id)
+        public async Task<ActionResult<ApiResult<BookDTO>>> GetBooksOfCategory(
+            int id,
+            int pageIndex = 0,
+            int pageSize = 10,
+            string? sortColumn = null,
+            string? sortOrder = null,
+            string? filterColumn = null,
+            string? filterQuery = null)
         {
-            return await context.Books.Where(b => b.CategoryId == id).ToListAsync();
+            return await ApiResult<BookDTO>.CreateAsync(
+                context.Books.AsNoTracking()
+                    .Select(b => new BookDTO()
+                    {
+                        Id = b.Id,
+                        Title = b.Title,
+                        Subtitle = b.Subtitle,
+                        Description = b.Description,
+                        Edition = b.Edition,
+                        Isbn13 = b.Isbn13,
+                        ImageUrl = b.ImageUrl,
+                        Price = b.Price,
+                        AuthorId = b.Author!.Id,
+                        AuthorName = b.Author!.Name,
+                        CategoryId = b.Category!.Id,
+                        CategoryLabel = b.Category!.Label
+                    })
+                    .Where(b => b.CategoryId == id),
+                        pageIndex,
+                pageSize,
+                sortColumn,
+                sortOrder,
+                filterColumn,
+                filterQuery);
         }
 
         // PUT: api/Categories/5
