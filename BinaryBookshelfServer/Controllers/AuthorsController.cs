@@ -40,16 +40,24 @@ namespace BinaryBookshelfServer.Controllers
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Author>> GetAuthor(int id)
+        public async Task<ActionResult<AuthorDTO>> GetAuthor(int id)
         {
-            var author = await context.Authors.FindAsync(id);
+            Author? author = await context.Authors.FindAsync(id);
 
             if (author == null)
             {
                 return NotFound();
             }
 
-            return author;
+            AuthorDTO authorDTO = new()
+            {
+                Id = author.Id,
+                Name = author.Name,
+                Background = author.Background,
+                TotalBooks = author.Books!.Count
+            };
+
+            return authorDTO;
         }
 
         // GET: api/Authors/BooksByAuthor/5

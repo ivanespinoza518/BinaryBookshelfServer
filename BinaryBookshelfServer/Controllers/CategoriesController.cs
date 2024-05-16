@@ -39,16 +39,23 @@ namespace BinaryBookshelfServer.Controllers
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
         {
-            var category = await context.Categories.FindAsync(id);
+            Category? category = await context.Categories.FindAsync(id);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            return category;
+            CategoryDTO categoryDTO = new()
+            { 
+                Id = category.Id,
+                Label = category.Label,
+                TotalBooks = category.Books!.Count
+            };
+
+            return categoryDTO;
         }
 
         // GET: api/Categories/BooksOfCategory/5

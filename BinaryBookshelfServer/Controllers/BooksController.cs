@@ -50,16 +50,30 @@ namespace BinaryBookshelfServer.Controllers
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(int id)
+        public async Task<ActionResult<BookDTO>> GetBook(int id)
         {
-            var book = await context.Books.FindAsync(id);
+            Book? book = await context.Books.FindAsync(id);
 
             if (book == null)
             {
                 return NotFound();
             }
 
-            return book;
+            BookDTO bookDTO = new()
+            {
+                Id = book.Id,
+                Title = book.Title,
+                Subtitle = book.Subtitle,
+                Description = book.Description,
+                Edition = book.Edition,
+                Isbn13 = book.Isbn13,
+                ImageUrl = book.ImageUrl,
+                Price = book.Price,
+                AuthorId = book.AuthorId,
+                CategoryId = book.CategoryId
+            };
+
+            return bookDTO;
         }
 
         // PUT: api/Books/5
